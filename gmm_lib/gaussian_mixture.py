@@ -8,6 +8,11 @@ class GaussianMixture:
         self.max_iter = int(max_iter)
 
     def initialize(self, X):
+        """
+        The function initializes the parameters for a Gaussian Mixture Model (GMM) using the input data.
+        
+        :param X: X is the input data, which is a numpy array with shape (m, n).
+        """
         self.shape = X.shape # shape of the input (m, n)
         self.m, self.n = self.shape
 
@@ -28,9 +33,21 @@ class GaussianMixture:
 
 
     def e_step(self, X):
+        """
+        The function "e_step" calculates the responsibility matrix for a given input X.
+        
+        :param X: The parameter X is a matrix that represents the input data.
+        """
         self.responsibility_k = self.responsibility_matrix(X)
 
     def m_step(self, X):
+        """
+        The function calculates the updated mixture weights, means, and covariances for each component
+        in a Gaussian Mixture Model based on the responsibilities of each data point.
+        
+        :param X: X is a numpy array representing the input data. It has shape (m, n), where m is the
+        number of samples and n is the number of features.
+        """
         self.mixture_weights = self.responsibility_k.mean(axis=0)
         for i in range(self.k):
             responsibility_k = self.responsibility_k[:, [i]] #(m, 1)
@@ -45,12 +62,27 @@ class GaussianMixture:
                                    bias=True) # covariance
 
     def fit(self, X):
+        """
+        The function performs the expectation-maximization algorithm to fit a model to the given data.
+        
+        :param X: The input data for the model. It could be a matrix or an array-like object containing
+        the features or variables used for training the model.
+        """
         self.initialize(X)
         for iteration in range(self.max_iter):
             self.e_step(X)
             self.m_step(X)
 
     def responsibility_matrix(self, X): # shape = (m, k)
+        """
+        The function calculates the responsibility matrix for a given data matrix using a Gaussian
+        mixture model.
+        
+        :param X: X is a numpy array with shape (m, n), where m is the number of features and n is
+        the number of data points.
+        :return: the responsibility matrix, which is a matrix of shape (m, k) where m is the number of
+        data points and k is the number of clusters.
+        """
         likelihood = np.zeros((self.m, self.k))
         for i in range(self.k):
             likelihood[:, i] = multivariate_normal.pdf(X, mean=self.means[i],\
@@ -62,5 +94,14 @@ class GaussianMixture:
         return responsibility_matrix
 
     def predict(self, X):
+        """
+        The function predicts the class labels for a given set of input data.
+        
+        :param X: The parameter X represents the input data for which you want to make predictions. It
+        is a matrix or array-like object with shape (n_samples, n_features), where n_samples is the
+        number of samples or instances in the dataset, and n_features is the number of features or
+        attributes for each sample
+        :return: the index of the maximum probability value in the responsibility_k matrix for each data point.
+        """
         responsibility_k = self.responsibility_matrix(X)
         return np.argmax(responsibility_k, axis=1)
