@@ -1,5 +1,5 @@
 # SEDS in python
-Python implementation of Stable_Estimator of Dynamical System Algorithm with Constrained Gaussian Mixture Regression.
+Python implementation of Stable Estimator of Dynamical System Algorithm with Constrained Gaussian Mixture Regression.
 
 
 ## References
