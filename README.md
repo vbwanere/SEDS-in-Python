@@ -1,4 +1,4 @@
-# SEDS in Python
+# SEDS in Python (In-Process)
 Python implementation of Stable Estimator of Dynamical System Algorithm with Constrained Gaussian Mixture Regression.
 
 
